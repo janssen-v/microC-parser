@@ -59,6 +59,6 @@ exp8 -> NOT_OP exp9
 exp8 -> MINUS exp9
 exp8 -> exp9
 exp9 -> ID LSQUARE exp RSQUARE
-exp9 -> ID
 exp9 -> INT_NUM
+exp9 -> ID
 exp9 -> LPAR exp RPAR
