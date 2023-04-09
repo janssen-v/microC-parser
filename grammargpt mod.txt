@@ -9,6 +9,8 @@ declaration_list -> declaration
 declaration -> ID ASSIGN INT_NUM
 declaration -> ID LSQUARE INT_NUM RSQUARE
 declaration -> ID
+code_block -> statement
+code_block -> LBRACE statements RBRACE
 statements -> statements statement
 statements -> statement
 statement -> assign_statement SEMI
@@ -28,7 +30,7 @@ if_statement -> if_stmt ELSE code_block
 if_stmt -> IF LPAR exp RPAR code_block
 while_statement -> WHILE LPAR exp RPAR code_block
 do_while_statement -> DO code_block WHILE LPAR exp RPAR
-return_statement -> RETURN exp SEMI
+return_statement -> RETURN
 read_statement -> READ LPAR ID RPAR
 write_statement -> WRITE LPAR exp RPAR
 exp -> exp OROR exp1
