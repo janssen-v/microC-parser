@@ -1,38 +1,53 @@
-program' -> program EOF
-program -> var_declarations statements
+program -> var_declarations statements EOF
+
 var_declarations -> var_declarations var_declaration
 var_declarations -> var_declaration
 var_declarations -> ''
+
 var_declaration -> INT declaration_list SEMI
+
 declaration_list -> declaration_list COMMA declaration
 declaration_list -> declaration
+
 declaration -> ID ASSIGN INT_NUM
 declaration -> ID LSQUARE INT_NUM RSQUARE
 declaration -> ID
+
 code_block -> statement
 code_block -> LBRACE statements RBRACE
+
 statements -> statements statement
 statements -> statement
+
 statement -> assign_statement SEMI
 statement -> control_statement
 statement -> read_write_statement SEMI
 statement -> SEMI
+
 control_statement -> if_statement
 control_statement -> while_statement
 control_statement -> do_while_statement SEMI
 control_statement -> return_statement SEMI
+
 read_write_statement -> read_statement
 read_write_statement -> write_statement
+
 assign_statement -> ID LSQUARE exp RSQUARE ASSIGN exp
 assign_statement -> ID ASSIGN exp
+
 if_statement -> if_stmt
 if_statement -> if_stmt ELSE code_block
+
 if_stmt -> IF LPAR exp RPAR code_block
+
 while_statement -> WHILE LPAR exp RPAR code_block
 do_while_statement -> DO code_block WHILE LPAR exp RPAR
+
 return_statement -> RETURN
+
 read_statement -> READ LPAR ID RPAR
 write_statement -> WRITE LPAR exp RPAR
+
 exp -> exp OROR exp1
 exp -> exp1
 exp1 -> exp1 ANDAND exp2
@@ -48,8 +63,8 @@ exp5 -> exp6 LT exp7
 exp5 -> exp6 GT exp7
 exp5 -> exp6 LTEQ exp7
 exp5 -> exp6 GTEQ exp7
-exp5 -> exp6 SHL_OP exp7
-exp5 -> exp6 SHR_OP exp7
+exp5 -> exp6 SHL_OP exp6
+exp5 -> exp6 SHR_OP exp6
 exp5 -> exp6
 exp6 -> exp6 PLUS exp7
 exp6 -> exp6 MINUS exp7
