@@ -1,4 +1,4 @@
-program -> var_declarations statements
+program -> var_declarations statements EOF
 
 var_declarations -> var_declarations
 var_declarations -> var_declaration
@@ -9,9 +9,9 @@ var_declaration -> INT declaration_list SEMI
 declaration_list -> declaration_list COMMA declaration
 declaration_list -> declaration
 
-declaration -> IDENTIFIER ASSIGN NUMBER
-declaration -> IDENTIFIER LSQUARE NUMBER RSQUARE
-declaration -> IDENTIFIER
+declaration -> ID ASSIGN INT_NUM
+declaration -> ID LSQUARE INT_NUM RSQUARE
+declaration -> ID
 
 code_block -> statement
 code_block -> LBRACE statements RBRACE
@@ -32,8 +32,8 @@ control_statement -> return_statement SEMI
 read_write_statement -> read_statement
 read_write_statement -> write_statement
 
-assign_statement -> IDENTIFIER LSQUARE exp RSQUARE ASSIGN exp
-assign_statement -> IDENTIFIER ASSIGN exp
+assign_statement -> ID LSQUARE exp RSQUARE ASSIGN exp
+assign_statement -> ID ASSIGN exp
 
 if_statement -> if_stmt
 if_statement -> if_stmt ELSE code_block
@@ -45,12 +45,12 @@ do_while_statement -> DO code_block WHILE LPAR exp RPAR
 
 return_statement -> RETURN
 
-read_statement -> READ LPAR IDENTIFIER RPAR
+read_statement -> READ LPAR ID RPAR
 write_statement -> WRITE LPAR exp RPAR
 
-exp -> INT_NUM
-exp -> IDENTIFIER
-exp -> IDENTIFIER LSQUARE exp LSQUARE
+exp -> INT
+exp -> ID
+exp -> ID LSQUARE exp RSQUARE
 exp -> NOT_OP exp
 exp -> exp AND_OP exp
 exp -> exp OR_OP exp
