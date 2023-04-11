@@ -1,6 +1,8 @@
 import csv
 
-grammarfile = open("grammartest.txt", "r")
+MAX_STEPS = 1000
+
+grammarfile = open("grammarload.txt", "r")
 gramload = grammarfile.read()
 grammar = gramload.split("\n")
 
@@ -46,13 +48,14 @@ def parseInput(tokens, table):
         print("S:", step, "Stack:", stack, "Input:", input, "Action:", action)
         print()
         
-        if (step > 11):
+        # Break if past maximum runtime or if accept state
+        if (step > MAX_STEPS or action == 'acc'):
             break
         
         # Make case for empty '' action 
         # Case SHIFT
         if ('s' in action):
-            state.append(action[-1])
+            state.append(action[1:])
             stack.append(input.pop(0))
         # Case REDUCE
         elif ('r' in action):
@@ -66,9 +69,6 @@ def parseInput(tokens, table):
             stack.append(lhs)
         # Case SHIFT/REDUCE Conflict
             # Shift by Default
-        # Case ACCEPT
-        elif (action == ''):
-            print('Empty')
         # Case GOTO
         elif (int(action)):
             # Add GOTO to state
@@ -79,18 +79,17 @@ def parseInput(tokens, table):
         #   break
         
 def main():
-    with open("/Users/vincent/Documents/Microsoft Office/LR(1)test.csv", newline='') as csvfile:
+    with open("/Users/vincent/Documents/Microsoft Office/LR(1).csv", newline='') as csvfile:
         lr1 = csv.DictReader(csvfile)
         lr1Table = []
         for state in lr1:
             lr1Table.append(dict(state))
     
-    sampleTokens = 'c d d'
+    sampleTokens = 'INT ID SEMI INT ID SEMI ID ASSIGN ID PLUS INT_NUM SEMI RETURN SEMI EOF'
     tokenList = splitTokens(sampleTokens)
     
     parseInput(tokenList, lr1Table)
 
 if __name__ == "__main__":
-    #print(table[0]["c"])
     main()
 # end main
