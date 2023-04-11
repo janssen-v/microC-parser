@@ -2,14 +2,9 @@ import csv
 
 MAX_STEPS = 1000
 
-grammarfile = open("grammarload.txt", "r")
+grammarfile = open("Grammars/grammarload.txt", "r")
 gramload = grammarfile.read()
 grammar = gramload.split("\n")
-
-# grammar = ["S' -> S",
-#            "S -> C C",
-#            "C -> c C",
-#            "C -> d"]
 
 # Turns a string of tokens into a list of tokens
 def splitTokens(tokenString):
@@ -79,7 +74,7 @@ def parseInput(tokens, table):
         #   break
         
 def main():
-    with open("/Users/vincent/Documents/Microsoft Office/LR(1).csv", newline='') as csvfile:
+    with open("ParseTable/LR(1).csv", newline='') as csvfile:
         lr1 = csv.DictReader(csvfile)
         lr1Table = []
         for state in lr1:
