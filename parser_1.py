@@ -14,6 +14,64 @@ def preprocess(filename):
     #output = " ".join(cleanTokens)
     return cleanTokens
 
+# If table has a shift reduce conflict of sSV / rRV, return (SV, RV) 
+def splitSHR(shiftreduce):
+    temp = shiftreduce.split('/')
+    sr = []
+    for item in temp:
+        sr.append(item.strip())
+    shift = sr[0]
+    reduce = sr[1]
+    return (shift[1:], reduce[1:])
+
+def printCurrent(state, stack, input, action):
+    curStack = stack.copy()
+    curState = state[-1]
+    nextType = input[0]
+    nextAction = ''
+    # Action Formatting
+    # Case SHIFT/REDUCE
+    
+    if ('/' in action):
+        '''
+        temp = action.split('/')
+        sr = []
+        for item in temp:
+            sr.append(item.strip())
+        nextAction = 'shift to state' + sr[0][1:]
+        '''
+        SV, RV =splitSHR(action)
+        nextAction = 'shift to state ' + SV
+    # Case SHIFT
+    elif ('s' in action):
+        nextAction = 'shift to state ' + action[1:]
+    # Case REDUCE
+    elif ('r' in action):
+        lhs, rhs = getRule(action[1:])
+        rhs = (' ').join(rhs)
+        rule = (lhs, rhs)
+        nextType = lhs
+        nextAction = 'reduce by grammar ' + action[1:] + ': ' + ('->').join(rule) 
+    # Case GOTO
+    elif (action.isnumeric()):
+        nextAction = 'goto state ' + action
+        
+    elif (action == 'acc'):
+        nextAction = 'Accept !'
+    
+    # Add stack pointer
+    # If stack less than state, pointer at end
+    if len(stack) < len(state):
+        curStack.append('|')
+    # If stack equals state, pointer before last
+    else:
+        curStack.insert(-1,'|')
+    
+    print(f'state: {curState:8} next type: {nextType:18} {nextAction}')
+    print('current parsing stack: ' + (' ').join(curStack))    
+    
+    print()   
+
 # Parser
 MAX_STEPS = 1000
 
@@ -62,15 +120,18 @@ def parseInput(tokens, table):
             action = lookup[input[0]]
 
 
-        print("State:", state)
-        print("S:", step, "Stack:", stack, "Input:", input, "Action:", action)
-        print()
+        # print("State:", state)
+        # print("S:", step, "Stack:", stack, "Input:", input, "Action:", action)
+        # print()
+        #printCurrent(state, stack, input, action)
         
         # Break if past maximum runtime or if accept state
         if (step > MAX_STEPS or action == 'acc'):
             break
         
         # Make case for empty '' action 
+        # Case SHIFT/REDUCE Conflict
+            # Shift by Default
         # Case SHIFT
         if ('s' in action):
             state.append(action[1:])
@@ -85,16 +146,15 @@ def parseInput(tokens, table):
                 state.pop()
             # Push grammar to state
             stack.append(lhs)
-        # Case SHIFT/REDUCE Conflict
-            # Shift by Default
-        # Case GOTO
-        elif (int(action)):
+        # Case GOTO (Is Integer)
+        elif (action.isnumeric()):
             # Add GOTO to state
             state.append(action)
     
         step+=1
         #if (len(input) < 1):
         #   break
+        printCurrent(state,stack,input,action)
         
 def main():
     with open("ParseTable/LR(1).csv", newline='') as csvfile:
