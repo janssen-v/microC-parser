@@ -27,5 +27,5 @@ clean:
 	@echo "Cleaning..."
 	rm -f scanner
 	rm -f scanned.txt
-	rm -f prased.txt
+	rm -f parsed.txt
 	rm -rf LexerOutput
