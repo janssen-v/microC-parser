@@ -1,4 +1,5 @@
 import csv
+import sys
 
 # Helper Functions
 
@@ -170,9 +171,12 @@ def main():
     #sampleTokens = 'INT ID SEMI INT ID SEMI ID ASSIGN ID PLUS INT_NUM SEMI RETURN SEMI EOF'
     #tokenList = splitSampleTokens(sampleTokens)
     
-    tokenList = preprocess('LexerOutput/output5.txt')
-    
-    parseInput(tokenList, lr1Table)
+    #tokenList = preprocess('LexerOutput/output5.txt')
+    if len(sys.argv) < 2:
+        print("Please specify a file to parse")
+    else:
+        tokenList = preprocess(sys.argv[1])
+        parseInput(tokenList, lr1Table)
 
 if __name__ == "__main__":
     main()
