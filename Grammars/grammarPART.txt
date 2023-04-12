@@ -1,7 +1,7 @@
 program -> var_declarations statements EOF
 
 var_declarations -> var_declarations var_declaration
-var_declarations -> var_declaration
+var_declarations -> ''
 
 var_declaration -> INT declaration_list SEMI
 
