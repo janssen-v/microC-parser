@@ -1,18 +1,41 @@
 import csv
 
+# Helper Functions
+
+# Preprocesses output from scanner to make it compatible with this parser
+def preprocess(filename):
+    f = open(filename, 'r')
+    tokens = (f.read().strip().split('\n'))
+    f.close()
+    cleanTokens = []
+    for token in tokens:
+        cleanTokens.append(token[7:])
+    cleanTokens.append('EOF')
+    #output = " ".join(cleanTokens)
+    return cleanTokens
+
+# Parser
 MAX_STEPS = 1000
 
-grammarfile = open("Grammars/grammarload.txt", "r")
+grammarfile = open("Grammars/grammarPART Mod 1.txt", "r")
 gramload = grammarfile.read()
 grammar = gramload.split("\n")
+rules = []
+for line in grammar:
+    if (line == ''):
+        continue
+    else:
+        rules.append(line)
+grammarfile.close()
 
-# Turns a string of tokens into a list of tokens
-def splitTokens(tokenString):
+
+# Turns a string of tokens into a list of tokens (used for sample only)
+def splitSampleTokens(tokenString):
     return tokenString.strip().split()
 
-def getGrammar(rule):
+def getRule(rule):
     # Convert Production Rule
-    prod = grammar[int(rule)].split('->')
+    prod = rules[int(rule)].split('->')
     lhs = prod[0]
     lhs = lhs.strip()
     rhs = prod[1].strip()
@@ -55,7 +78,7 @@ def parseInput(tokens, table):
         # Case REDUCE
         elif ('r' in action):
             # Reduce by grammar action[-1]
-            lhs, rhs = getGrammar(action[1:])
+            lhs, rhs = getRule(action[1:])
             # Pop stack & state by amount of rules in rhs
             for i in range(len(rhs)):
                 stack.pop()
@@ -80,8 +103,10 @@ def main():
         for state in lr1:
             lr1Table.append(dict(state))
     
-    sampleTokens = 'INT ID SEMI INT ID SEMI ID ASSIGN ID PLUS INT_NUM SEMI RETURN SEMI EOF'
-    tokenList = splitTokens(sampleTokens)
+    #sampleTokens = 'INT ID SEMI INT ID SEMI ID ASSIGN ID PLUS INT_NUM SEMI RETURN SEMI EOF'
+    #tokenList = splitSampleTokens(sampleTokens)
+    
+    tokenList = preprocess('LexerOutput/output1.txt')
     
     parseInput(tokenList, lr1Table)
 
