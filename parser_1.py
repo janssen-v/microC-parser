@@ -17,7 +17,7 @@ def preprocess(filename):
 # Parser
 MAX_STEPS = 1000
 
-grammarfile = open("Grammars/grammarPART Mod 1.txt", "r")
+grammarfile = open("Grammars/grammarPART.txt", "r")
 gramload = grammarfile.read()
 grammar = gramload.split("\n")
 rules = []
