@@ -73,8 +73,7 @@ def printCurrent(state, stack, input, action):
     print()   
 
 # Parser
-MAX_STEPS = 1000
-
+#MAX_STEPS = 10000 for debug
 grammarfile = open("Grammars/grammarPART.txt", "r")
 gramload = grammarfile.read()
 grammar = gramload.split("\n")
@@ -110,8 +109,8 @@ def parseInput(tokens, table):
     step = 1
     # While state != accept state
     while (accept != True):
+        prevState = state.copy()
         # Look up table based on current state
-        
         lookup = table[int(state[-1])]
         # If state.len <= stack.len, GOTO
         if (len(state) <= len(stack)):
@@ -119,21 +118,25 @@ def parseInput(tokens, table):
         else:
             action = lookup[input[0]]
 
-
         # print("State:", state)
         # print("S:", step, "Stack:", stack, "Input:", input, "Action:", action)
         # print()
         #printCurrent(state, stack, input, action)
         
         # Break if past maximum runtime or if accept state
-        if (step > MAX_STEPS or action == 'acc'):
+        #if (step > MAX_STEPS or action == 'acc'): for debug
+        if (action == 'acc'):
+            print()
+            print("Accept!")
             break
         
-        # Make case for empty '' action 
         # Case SHIFT/REDUCE Conflict
-            # Shift by Default
+        if ('/' in action):
+            SV, RV = splitSHR(action)
+            state.append(SV)
+            stack.append(input.pop(0))
         # Case SHIFT
-        if ('s' in action):
+        elif ('s' in action):
             state.append(action[1:])
             stack.append(input.pop(0))
         # Case REDUCE
@@ -154,7 +157,7 @@ def parseInput(tokens, table):
         step+=1
         #if (len(input) < 1):
         #   break
-        printCurrent(state,stack,input,action)
+        printCurrent(prevState,stack,input,action)
         
 def main():
     with open("ParseTable/LR(1).csv", newline='') as csvfile:
