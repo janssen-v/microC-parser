@@ -73,7 +73,7 @@ def printCurrent(state, stack, input, action):
     print()   
 
 # Parser
-#MAX_STEPS = 10000 for debug
+#MAX_STEPS = 800 #for debug
 grammarfile = open("Grammars/grammarPART.txt", "r")
 gramload = grammarfile.read()
 grammar = gramload.split("\n")
@@ -118,16 +118,16 @@ def parseInput(tokens, table):
         else:
             action = lookup[input[0]]
 
-        # print("State:", state)
-        # print("S:", step, "Stack:", stack, "Input:", input, "Action:", action)
-        # print()
+        #print("S:", step, "State:", state, "Action:", action)
+        #print("Stack:", stack, "Input:", input)
+        #print()
         #printCurrent(state, stack, input, action)
         
         # Break if past maximum runtime or if accept state
-        #if (step > MAX_STEPS or action == 'acc'): for debug
+        #if (step > MAX_STEPS or action == 'acc'): #for debug
         if (action == 'acc'):
-            print()
             print("Accept!")
+            #print(step)
             break
         
         # Case SHIFT/REDUCE Conflict
@@ -143,10 +143,11 @@ def parseInput(tokens, table):
         elif ('r' in action):
             # Reduce by grammar action[-1]
             lhs, rhs = getRule(action[1:])
-            # Pop stack & state by amount of rules in rhs
-            for i in range(len(rhs)):
-                stack.pop()
-                state.pop()
+            # Pop stack & state by amount of rules in rhs if RHS not epsilon ('')
+            if (rhs != ["''"]):
+                for i in range(len(rhs)):
+                    stack.pop()
+                    state.pop()
             # Push grammar to state
             stack.append(lhs)
         # Case GOTO (Is Integer)
@@ -169,7 +170,7 @@ def main():
     #sampleTokens = 'INT ID SEMI INT ID SEMI ID ASSIGN ID PLUS INT_NUM SEMI RETURN SEMI EOF'
     #tokenList = splitSampleTokens(sampleTokens)
     
-    tokenList = preprocess('LexerOutput/output1.txt')
+    tokenList = preprocess('LexerOutput/output5.txt')
     
     parseInput(tokenList, lr1Table)
 
